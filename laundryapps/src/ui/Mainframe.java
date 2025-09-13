@@ -22,7 +22,7 @@ public class Mainframe extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+				EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Mainframe frame = new Mainframe();
@@ -33,7 +33,8 @@ public class Mainframe extends JFrame {
 			}
 		});
 	}
-
+	
+	
 	/**
 	 * Create the frame.
 	 */
