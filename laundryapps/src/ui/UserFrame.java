@@ -40,8 +40,7 @@ public class UserFrame extends JFrame {
 	 * Create the frame.
 	 */
 	
-	
-	public UserFrame() {
+		public UserFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 625, 472);
 		contentPane = new JPanel();
@@ -102,3 +101,4 @@ public class UserFrame extends JFrame {
 	}
 
 }
+

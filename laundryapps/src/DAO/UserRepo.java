@@ -1,8 +1,14 @@
 package DAO;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 import confg.database;
 import model.User;
@@ -35,6 +41,49 @@ public class UserRepo implements UserDAO{
 				e.printStackTrace();
 			}
 		}
+	}
+	@Override
+	public List<User> show(){
+		List<User> ls=null;
+		try {
+			ls = new ArrayList<User>();
+			Statement st = connection.createStatement();
+			ResultSet rs =st.executeQuery(select);
+			while(rs.next()) {
+				User user = new User();
+				user.setId(rs.getString("id"));
+				user.setNama(rs.getString("name"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+				ls.add(user);
+			};
+			
+		}catch(SQLException e) {
+			Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+			}
+		return ls;
+		
+	}
+	@Override
+	public void update(User user) {
+		PreparedStatement st = null;
+		try {
+			st = connection.prepareStatement(update);
+			st.setString(1, user.getNama());
+			st.setString(2, user.getUsername());
+			st.setString(3, user.getPassword());
+			st.setString(4, user.getId());
+			st.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+			}finally {
+				try{
+					st.close();
+				}catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		
 	}
 	@Override
 	public void delete(String id) {
