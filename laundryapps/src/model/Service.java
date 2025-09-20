@@ -15,10 +15,10 @@ public class Service {
 		public void setjenis(String jenis) {
 			this.jenis = jenis;
 		}
-		public String getaharga () {
+		public String getharga () {
 			return harga;
 		}
-		public void setaharga(String harga) {
+		public void setharga(String harga) {
 			this.harga = harga;
 		}
 		public String getstatus () {

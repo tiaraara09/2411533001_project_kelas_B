@@ -4,9 +4,9 @@
 /**
  * 
  */
-module laundryapps {
-	requires java.desktop;
-	requires java.sql;
-	requires mysql.connector.j;
-	requires java.logging;
-}
+//module laundryapps {
+////	requires java.desktop;
+////	requires java.sql;
+////	requires mysql.connector.j;
+////	requires java.logging;
+//}

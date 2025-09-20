@@ -33,8 +33,7 @@ public class Mainframe extends JFrame {
 			}
 		});
 	}
-	
-	
+
 	/**
 	 * Create the frame.
 	 */

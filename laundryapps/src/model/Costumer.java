@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.JTextField;
+
 public class Costumer {
 	String id, nama, alamat, nomor_hp;
 
