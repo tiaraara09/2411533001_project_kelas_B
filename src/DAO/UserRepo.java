@@ -10,10 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-import confg.Database;
-import model.User;
+import confg.database;
 
 public class UserRepo implements UserDAO{
+	private static final database Database = null;
 	private Connection connection;
 	final String insert ="INSERT INTO user (name, username, password) VALUES (?,?,?);";
 	final String select ="Select * from user;";
@@ -34,6 +34,7 @@ public class UserRepo implements UserDAO{
 			st.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
+			
 		}finally {
 			try {
 				st.close();
@@ -66,24 +67,16 @@ public class UserRepo implements UserDAO{
 	}
 	@Override
 	public void update(User user) {
-		PreparedStatement st = null;
-		try {
-			st = connection.prepareStatement(update);
-			st.setString(1, user.getNama());
-			st.setString(2, user.getUsername());
-			st.setString(3, user.getPassword());
-			st.setString(4, user.getId());
-			st.executeUpdate();
-		}catch(SQLException e) {
-			e.printStackTrace();
-			}finally {
-				try{
-					st.close();
-				}catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		
+	    String updateQuery = "UPDATE users SET nama = ?, username = ?, password = ? WHERE id = ?";
+	    try (PreparedStatement st = connection.prepareStatement(updateQuery)) {
+	        st.setString(1, user.getNama());
+	        st.setString(2, user.getUsername());
+	        st.setString(3, user.getPassword());
+	        st.setString(4, user.getId());
+	        st.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 	@Override
 	public void delete(String id) {

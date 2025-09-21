@@ -23,7 +23,6 @@ public class TableUser extends AbstractTableModel {
 	public String getColumnName(int column) {
 		return columnNames [column];
 	}
-	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
 		case 0:

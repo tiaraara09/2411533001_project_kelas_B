@@ -1,48 +1,42 @@
-package model;
+package table;
 
-public class User {
-	
-String id, nama, username, password;
-public String getId() {
-	return id;
+import java.util.List;
+import javax.swing.table.AbstractTableModel;
+import model.User;
+
+import model.User;
+public class TableUser extends AbstractTableModel {
+	List<User> ls;
+	private String[] columnNames = {"ID", "Name", "Username", "Password"};
+	public TableUser(List<User> ls) {
+		this.ls =ls;
+		}
+	@Override
+	public int getRowCount() {
+		return ls.size();
+		}
+	@Override
+	public int getColumnCount() {
+		return 4;
+	}
+	@Override
+	public String getColumnName(int column) {
+		return columnNames [column];
+	}
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		switch (columnIndex) {
+		case 0:
+			return ls.get(rowIndex).getId();
+		case 1:
+			return ls.get(rowIndex).getNama();
+		case 2:
+			return ls.get(rowIndex).getUsername();
+		case 3:
+			return ls.get(rowIndex).getPassword();
+			default:
+				return null;
+		}
 	}
 
-public void setId(String id) {
-	this.id = id;
-	}
-public String getNama() {
-	return nama;
-	}
-public void setNama(String nama) {
-	this.nama = nama;
-}
-public String getUsername() {
-	return username;
-}
-public void setUsername(String username) {
-	this.username = username;
-}
-public String getPassword() {
-	return password;
-}
-public void setPassword(String password) {
-	this.password = password;
-}
-
-public static boolean login(String username, String password) {
-	boolean isLoggin = false;
-	User user = new User();
-	user.setId("1");
-	user.setNama("Fulan");
-	user.setUsername("fulan");
-	user.setPassword("12345");
-	
-	if(user.getUsername().equalsIgnoreCase(username)
-			&& user.getPassword().equalsIgnoreCase(password)) {
-		isLoggin = true;
-	}else {
-		isLoggin = false;
-	}
-return isLoggin;
-	}
 }
