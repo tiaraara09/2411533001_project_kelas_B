@@ -7,7 +7,7 @@ import model.Costumer;
 public class TableCostumer extends AbstractTableModel {
 
     private List<Costumer> ls;
-    private String[] columnNames = {"id", "nama", "alamat", "nomor_hp"};
+    private String[] columnNames = {"id", "nama", "alamat", "email", "nomor_hp"};
 
     public TableCostumer(List<Costumer> ls) {
         this.ls = ls;
@@ -34,6 +34,8 @@ public class TableCostumer extends AbstractTableModel {
             case 2:
                 return ls.get(rowIndex).getAlamat();
             case 3:
+                return ls.get(rowIndex).getEmail();
+            case 4:
                 return ls.get(rowIndex).getNomor_hp();
             default:
                 return null;

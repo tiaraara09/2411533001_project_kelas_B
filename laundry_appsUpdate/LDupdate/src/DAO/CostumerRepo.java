@@ -1,116 +1,144 @@
 package DAO;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import confg.database;
 import model.Costumer;
-import model.User;
 
-public class CostumerRepo implements CostumerDAO{
-	private Connection connection;
-	final String insert = "INSERT INTO user (name, username, password) VALUES (?, ?, ?);";
-	final String select = "SELECT * FROM user;";
-	final String delete = "DELETE FROM user WHERE id = ?;";
-	final String update = "UPDATE user SET name = ?, username = ?, password = ? WHERE id = ?;";
+public class CostumerRepo implements CostumerDAO {
 
-	public CostumerRepo() {
-		connection= database.koneksi();
-	}
+    private Connection connection;
 
-	@Override
-	public void save(Costumer costumer) {
-		// save
-		PreparedStatement st=null;
-		try {
-			st = connection.prepareStatement(insert);
-			st.setString(1,  costumer.getNama());
-			st.setString(2,  costumer.getAlamat());
-			st.setString(3,  costumer.getNomor_hp());
-			st.executeUpdate();
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				st.close();
-			}catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-		
-	
-	@Override
-		//select
-		public List<Costumer> show(){
-			List<Costumer> ls=null;
-			try {
-				ls = new ArrayList<>();
-				Statement st = connection.createStatement();
-				ResultSet rs =st.executeQuery(select);
-				while(rs.next()) {
-					Costumer costumer = new Costumer();
-					costumer.setId(rs.getString("id"));
-					costumer.setNama(rs.getString("nama"));
-					costumer.setAlamat(rs.getString("alamat"));
-					costumer.setNomor_hp(rs.getString("nomor_hp"));
-					ls.add(costumer);
-				}
+    private static final String INSERT =
+            "INSERT INTO costumer (nama, alamat, email, nomor_hp) VALUES (?,?,?,?);";
 
-			}catch(SQLException e) {
-				Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
-				}
-			return ls;
-		}
-		
-	@Override
-	public void update(Costumer costumer) {
-		PreparedStatement st = null;
-		try {
-			st = connection.prepareStatement(update);
-			st.setString(1, costumer.getNama());
-			st.setString(2, costumer.getAlamat());
-			st.setString(3, costumer.getNomor_hp());
-			st.setString(4, costumer.getId());
-			st.executeUpdate();
-		}catch(SQLException e) {
-			e.printStackTrace();
-			}finally {
-				try{
-					st.close();
-				}catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-	}
+    private static final String SELECT =
+            "SELECT * FROM costumer;";
 
-	@Override
-	public void delete(String id) {
-		PreparedStatement st = null;
-		try {
-			st = connection.prepareStatement(delete);
-			st.setString(1, id);
-			st.executeUpdate();
+    private static final String DELETE =
+            "DELETE FROM costumer WHERE id=?;";
 
-		}catch(SQLException e) {
-			e.printStackTrace();
+    private static final String UPDATE =
+            "UPDATE costumer SET nama=?, alamat=?, email=?, nomor_hp=? WHERE id=?;";
 
-		}finally {
-			try {
-				st.close();
+    public CostumerRepo() {
+        connection = database.koneksi();
+    }
 
-			}catch(SQLException e) {
-				e.printStackTrace();
+    @Override
+    public void save(Costumer costumer) {
+        PreparedStatement st = null;
 
-			}
-		}
-	}
+        try {
+            st = connection.prepareStatement(INSERT);
+            st.setString(1, costumer.getNama());
+            st.setString(2, costumer.getAlamat());
+            st.setString(3, costumer.getEmail());
+            st.setString(4, costumer.getNomor_hp());
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            closeStatement(st);
+        }
+    }
+
+    @Override
+    public List<Costumer> show() {
+
+        List<Costumer> ls = new ArrayList<>();
+        Statement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(SELECT);
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String nama = rs.getString("nama");
+                String email = rs.getString("alamat");
+                String alamat = rs.getString("email");
+                String nomorHp = rs.getString("nomor_hp");
+
+                Costumer costumer = new Costumer(id, nama, email, alamat, nomorHp);
+                ls.add(costumer);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            closeResultSet(rs);
+            closeStatement(st);
+        }
+
+        return ls;
+    }
+
+    @Override
+    public void update(Costumer costumer) {
+        PreparedStatement st = null;
+
+        try {
+            st = connection.prepareStatement(UPDATE);
+            st.setString(1, costumer.getNama());
+            st.setString(2, costumer.getAlamat());
+            st.setString(3, costumer.getEmail());
+            st.setString(4, costumer.getNomor_hp());
+            st.setString(5, costumer.getId());
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            closeStatement(st);
+        }
+    }
+
+    @Override
+    public void delete(String id) {
+        PreparedStatement st = null;
+
+        try {
+            st = connection.prepareStatement(DELETE);
+            st.setString(1, id);
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            closeStatement(st);
+        }
+    }
+
+    private void closeStatement(Statement st) {
+        if (st != null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void closeResultSet(ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

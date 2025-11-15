@@ -3,18 +3,17 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class database {
-	Connection conn;
-        @SuppressWarnings("UseSpecificCatch")
-	public static Connection koneksi() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/laundy_apps",
-					"root","");
-			return conn;
-		}catch(Exception e) {
-			JOptionPane.showInternalMessageDialog(null, e);
-			return null;
-		}
-	}
+    Connection conn;
+    public static Connection koneksi() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/laundy_apps",
+                    "root","");
+            return conn;
+        }catch(Exception e) {
+            JOptionPane.showInternalMessageDialog(null, e);
+            return null;
+        }
+    }
 
 }

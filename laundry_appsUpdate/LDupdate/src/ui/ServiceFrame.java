@@ -8,13 +8,14 @@ import javax.swing.border.EmptyBorder;
 import DAO.ServiceRepo;
 import model.Service;
 import table.TableService;
-import util.ValidationUtil; // <- tambahkan import ini
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JScrollPane;
+
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -23,48 +24,31 @@ import java.awt.event.MouseEvent;
 
 public class ServiceFrame extends JFrame {
 
-    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTextField txtjenis;
     private JTextField txtharga;
     private JTextField txtstatus;
     private JTable tableService;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    ServiceFrame frame = new ServiceFrame();
-                    frame.setVisible(true);
-                    frame.loadTable();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void reset() {
-        txtjenis.setText("");
-        txtharga.setText("");
-        txtstatus.setText("");
-        id = null;
-    }
-
     ServiceRepo srv = new ServiceRepo();
     List<Service> ls;
     public String id;
 
-    public void loadTable() {
-        ls = srv.show();
-        TableService tu = new TableService(ls);
-        tableService.setModel(tu);
-        tableService.getTableHeader().setVisible(true);
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                ServiceFrame frame = new ServiceFrame();
+                frame.setVisible(true);
+                frame.loadTable();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public ServiceFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 552, 452);
+        setBounds(100, 100, 600, 450);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -85,102 +69,89 @@ public class ServiceFrame extends JFrame {
         txtjenis = new JTextField();
         txtjenis.setBounds(114, 59, 241, 20);
         contentPane.add(txtjenis);
-        txtjenis.setColumns(10);
 
         txtharga = new JTextField();
-        txtharga.setColumns(10);
         txtharga.setBounds(114, 92, 241, 20);
         contentPane.add(txtharga);
 
         txtstatus = new JTextField();
-        txtstatus.setColumns(10);
         txtstatus.setBounds(114, 131, 241, 20);
         contentPane.add(txtstatus);
 
         JButton btnsave = new JButton("Save");
-        btnsave.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (!ValidationUtil.validateNotEmpty("Jenis", txtjenis.getText())) return;
-                if (!ValidationUtil.validateNumber("Harga", txtharga.getText())) return;
-                if (!ValidationUtil.validateNotEmpty("Status", txtstatus.getText())) return;
-
-                Service service = new Service();
-                service.setjenis(txtjenis.getText());
-                service.setharga(txtharga.getText());
-                service.setstatus(txtstatus.getText());
-
-                srv.save(service);
-                JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
-                reset();
-                loadTable();
-            }
+        btnsave.addActionListener(e -> {
+            Service service = new Service();
+            service.setjenis(txtjenis.getText());
+            service.setharga(txtharga.getText());
+            service.setstatus(txtstatus.getText());
+            srv.save(service);
+            reset();
+            loadTable(); // <-- WAJIB
         });
         btnsave.setBounds(54, 183, 89, 23);
         contentPane.add(btnsave);
 
         JButton btnupdate = new JButton("Update");
-        btnupdate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (id == null) {
-                    JOptionPane.showMessageDialog(null, "Pilih data yang akan diperbarui!");
-                    return;
-                }
-
-                if (!ValidationUtil.validateNotEmpty("Jenis", txtjenis.getText())) return;
-                if (!ValidationUtil.validateNumber("Harga", txtharga.getText())) return;
-                if (!ValidationUtil.validateNotEmpty("Status", txtstatus.getText())) return;
-
-                Service service = new Service();
-                service.setjenis(txtjenis.getText());
-                service.setharga(txtharga.getText());
-                service.setstatus(txtstatus.getText());
-                service.setId(id);
-
-                srv.update(service);
-                JOptionPane.showMessageDialog(null, "Data berhasil diperbarui!");
-                reset();
-                loadTable();
-            }
+        btnupdate.addActionListener(e -> {
+            Service service = new Service();
+            service.setjenis(txtjenis.getText());
+            service.setharga(txtharga.getText());
+            service.setstatus(txtstatus.getText());
+            service.setId(id);
+            srv.update(service);
+            reset();
+            loadTable();
         });
         btnupdate.setBounds(170, 183, 89, 23);
         contentPane.add(btnupdate);
 
         JButton btndelete = new JButton("Delete");
-        btndelete.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (id != null) {
-                    srv.delete(id);
-                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
-                    reset();
-                    loadTable();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Silahkan pilih data yang akan dihapus");
-                }
+        btndelete.addActionListener(e -> {
+            if (id != null) {
+                srv.delete(id);
+                reset();
+                loadTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Silahkan pilih data terlebih dahulu.");
             }
         });
         btndelete.setBounds(279, 183, 89, 23);
         contentPane.add(btndelete);
 
         JButton btnclear = new JButton("Cancel");
-        btnclear.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                reset();
-            }
-        });
+        btnclear.addActionListener(e -> reset());
         btnclear.setBounds(392, 183, 89, 23);
         contentPane.add(btnclear);
 
+        // SCROLLPANE WAJIB
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(36, 217, 520, 170);
+        contentPane.add(scrollPane);
+
         tableService = new JTable();
         tableService.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseClicked(MouseEvent e) {
-                id = tableService.getValueAt(tableService.getSelectedRow(), 0).toString();
-                txtjenis.setText(tableService.getValueAt(tableService.getSelectedRow(), 1).toString());
-                txtharga.setText(tableService.getValueAt(tableService.getSelectedRow(), 2).toString());
-                txtstatus.setText(tableService.getValueAt(tableService.getSelectedRow(), 3).toString());
+                int row = tableService.getSelectedRow();
+                id = tableService.getValueAt(row, 0).toString();
+                txtjenis.setText(tableService.getValueAt(row, 1).toString());
+                txtharga.setText(tableService.getValueAt(row, 2).toString());
+                txtstatus.setText(tableService.getValueAt(row, 3).toString());
             }
         });
-        tableService.setBounds(36, 217, 474, 161);
-        contentPane.add(tableService);
+        scrollPane.setViewportView(tableService);
+    }
+
+    public void loadTable() {
+        ls = srv.show();
+        TableService tb = new TableService(ls);
+        tableService.setModel(tb);
+        tableService.getTableHeader().setVisible(true);
+    }
+
+    public void reset() {
+        txtjenis.setText("");
+        txtharga.setText("");
+        txtstatus.setText("");
+        id = null;
     }
 }
