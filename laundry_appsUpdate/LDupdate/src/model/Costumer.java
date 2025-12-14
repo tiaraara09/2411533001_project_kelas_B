@@ -6,8 +6,6 @@ public class Costumer {
     String id;
     String nama;
     String alamat;
-
-
     String email;
     String nomor_hp;
 

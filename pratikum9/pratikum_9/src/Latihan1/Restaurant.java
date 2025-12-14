@@ -11,6 +11,7 @@ public class Restaurant {
         T2.run();
         T3.run();
         T4.run();
+        
         Thread t1 = new CookingTask("Pasta");
         Thread t2 = new CookingTask("Salad");
         Thread t3 = new CookingTask("Dessert");

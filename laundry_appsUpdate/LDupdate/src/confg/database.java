@@ -7,7 +7,7 @@ public class database {
     public static Connection koneksi() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/laundy_apps",
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/laundry_apps",
                     "root","");
             return conn;
         }catch(Exception e) {
