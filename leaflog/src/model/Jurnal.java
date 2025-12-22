@@ -1,33 +1,50 @@
 package model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import Enum.MoodType;
 
-public class Jurnal extends MoodTracker{
-    public int id;
-    public String judul;
-    public String konten;
+public class Jurnal {
+	private String id;
+	private Date tanggal;
+    private String judul;
+    private String konten;
 
-    public Jurnal(int id, String judul, String konten, MoodType mood, LocalDate tnggl) {
-        super(mood, LocalDate.now());
-        this.id = id;
-        this.judul = judul;
-        this.konten = konten;
+   
+    public Jurnal() {
+    	
+    }
+	    
+     
+    public Jurnal(Date tanggal, String id, String judul, String konten) {
+    	this.id = id;
+    	this.tanggal=tanggal;
+    	this.judul = judul;
+    	this.konten = konten;
     }
     
-    public void displayMoodInfo(MoodType mood, LocalDate tnggl) {
-      System.out.println("Mood hari ini" + tnggl + mood);
-    }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
+    
+    
 
-    public String getJudul() {
+    public Date getTanggal() {
+		return tanggal;
+	}
+
+
+	public void setTanggal(Date tanggal) {
+		this.tanggal = tanggal;
+	}
+
+
+	public String getJudul() {
         return judul;
     }
 

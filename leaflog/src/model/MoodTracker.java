@@ -4,12 +4,25 @@ import Enum.MoodType;
 import java.time.LocalDate;
 
 public abstract class MoodTracker {
-    private LocalDate tnggl;
-    private MoodType mood;
-
+	public int id;
+    protected LocalDate tnggl;
+    public MoodType mood;
+    
+    public MoodTracker() {
+    	
+    }
     public MoodTracker(MoodType mood, LocalDate tnggl) {
+    	this.id = id;
         this.mood = mood;
         this.tnggl = LocalDate.now();
+    }
+    
+    public int getId() {
+    	return id;
+    }
+    
+    public void setId(int id) {
+    	this.id = id;
     }
 
     public LocalDate getTnggl() {

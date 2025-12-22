@@ -12,7 +12,8 @@ public class ScheduedThreadPoolExample {
             Runnable task1 = new Comand("Task1");
             Runnable task2 = new Comand("Task2");
 
-            System.out.println("Current time : "+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":"+Calendar.getInstance().get(Calendar.SECOND));
+            System.out.println("Current time : "+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+
+            ":"+Calendar.getInstance().get(Calendar.SECOND));
 
             treadPool.scheduleAtFixedRate(task1, 2, 8, TimeUnit.SECONDS);
             treadPool.scheduleWithFixedDelay(task2, 5, 5, TimeUnit.SECONDS);

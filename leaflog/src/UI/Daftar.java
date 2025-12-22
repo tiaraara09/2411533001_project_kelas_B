@@ -1,82 +1,130 @@
 package UI;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.*;
+import javax.swing.*;
+import DAO.UserRepo;
+import model.User;
 
 public class Daftar extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTextField usernametxt;
-	private JTextField pwssdtxt;
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+    private JTextField namatxt;
+    private JTextField usernametxt;
+    private JPasswordField pwssdtxt;
+    private JPasswordField pwssdtxt2;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Daftar frame = new Daftar();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                Daftar frame = new Daftar();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
-	/**
-	 * Create the frame.
-	 */
-	public Daftar() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    public Daftar() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 350);
+        contentPane = new JPanel();
+        contentPane.setLayout(null);
+        contentPane.setBackground(Theme.BG_CALENDAR);
+        setContentPane(contentPane);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("WELCOME");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(139, 71, 173, 14);
-		contentPane.add(lblNewLabel);
-		
-		usernametxt = new JTextField();
-		usernametxt.setBounds(117, 96, 247, 20);
-		contentPane.add(usernametxt);
-		usernametxt.setColumns(10);
-		
-		pwssdtxt = new JTextField();
-		pwssdtxt.setColumns(10);
-		pwssdtxt.setBounds(117, 146, 247, 20);
-		contentPane.add(pwssdtxt);
-		
-		JButton btnLogin = new JButton("DAFTAR");
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		btnLogin.setBounds(180, 182, 89, 23);
-		contentPane.add(btnLogin);
-		
-		JLabel lblNewLabel_1 = new JLabel("NAME");
-		lblNewLabel_1.setBounds(51, 99, 49, 14);
-		contentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_1_1 = new JLabel("PASSWORD");
-		lblNewLabel_1_1.setBounds(51, 149, 76, 14);
-		contentPane.add(lblNewLabel_1_1);
-	}
+        JLabel lblTitle = new JLabel("DAFTAR AKUN BARU");
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitle.setForeground(Color.WHITE);
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
+        lblTitle.setBounds(80, 20, 280, 25);
+        contentPane.add(lblTitle);
+
+        JLabel lblNama = new JLabel("Nama");
+        lblNama.setForeground(Color.WHITE);
+        lblNama.setBounds(30, 70, 80, 25);
+        contentPane.add(lblNama);
+
+        namatxt = new JTextField();
+        namatxt.setBounds(120, 70, 250, 25);
+        contentPane.add(namatxt);
+
+        JLabel lblUser = new JLabel("Username");
+        lblUser.setForeground(Color.WHITE);
+        lblUser.setBounds(30, 110, 80, 25);
+        contentPane.add(lblUser);
+
+        usernametxt = new JTextField();
+        usernametxt.setBounds(120, 110, 250, 25);
+        contentPane.add(usernametxt);
+
+        JLabel lblPass = new JLabel("Password");
+        lblPass.setForeground(Color.WHITE);
+        lblPass.setBounds(30, 150, 80, 25);
+        contentPane.add(lblPass);
+
+        pwssdtxt = new JPasswordField();
+        pwssdtxt.setBounds(120, 150, 250, 25);
+        contentPane.add(pwssdtxt);
+
+        JLabel lblKonf = new JLabel("Konfirmasi");
+        lblKonf.setForeground(Color.WHITE);
+        lblKonf.setBounds(30, 190, 80, 25);
+        contentPane.add(lblKonf);
+
+        pwssdtxt2 = new JPasswordField();
+        pwssdtxt2.setBounds(120, 190, 250, 25);
+        contentPane.add(pwssdtxt2);
+
+        JButton btnDaftar = new JButton("DAFTAR");
+        btnDaftar.setBounds(150, 240, 100, 25);
+        btnDaftar.setBackground(Theme.BTN_DATE);
+        btnDaftar.setForeground(Color.BLACK);
+        btnDaftar.addActionListener(e -> daftarAction());
+        contentPane.add(btnDaftar);
+
+        JButton btnCancel = new JButton("CANCEL");
+        btnCancel.setBounds(270, 240, 100, 25);
+        btnCancel.setBackground(Theme.BTN_DATE);
+        btnCancel.setForeground(Color.BLACK);
+        btnCancel.addActionListener(e -> {
+            Login login = new Login();
+            login.setVisible(true);
+            dispose();
+        });
+        contentPane.add(btnCancel);
+    }
+
+    private void daftarAction() {
+        String nama = namatxt.getText().trim();
+        String username = usernametxt.getText().trim();
+        String password = new String(pwssdtxt.getPassword()).trim();
+        String password2 = new String(pwssdtxt2.getPassword()).trim();
+
+        if (nama.isEmpty() || username.isEmpty() || password.isEmpty() || password2.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua kolom harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!password.equals(password2)) {
+            JOptionPane.showMessageDialog(this, "Password dan konfirmasi tidak sama!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        User user = new User();
+        user.setNama(nama);
+        user.setUsername(username);
+        user.setPassword(password);
+
+        UserRepo repo = new UserRepo();
+        try {
+            repo.save(user);
+            JOptionPane.showMessageDialog(this, "Registrasi berhasil! Silakan login.");
+            Login login = new Login();
+            login.setVisible(true);
+            dispose();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Gagal daftar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
